@@ -1,0 +1,15 @@
+<!-- employees/templates/employee_dashboard.html -->
+
+<h2>Welcome, {{ user.username }}</h2>
+<p>Employee Dashboard</p>
+<a href="{% url 'apply_leave' %}"><button>Apply for Leave</button></a>
+<a href="{% url 'logout' %}"><button>Logout</button></a>
+
+<h3>Your Leave Requests</h3>
+<ul>
+    {% for leave in leave_requests %}
+        <li>
+            From: {{ leave.start_date }} To: {{ leave.end_date }} - Reason: {{ leave.reason }} - Status: {{ leave.status }}
+        </li>
+    {% endfor %}
+</ul>

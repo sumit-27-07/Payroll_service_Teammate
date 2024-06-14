@@ -1,0 +1,13 @@
+<h2>Employees under {{ user.username }}</h2>
+<ul>
+    {% for employee in employees %}
+        <li>
+            {{ employee.name }} - {{ employee.employee_id }} - {{ employee.status }}
+            <form method="post" action="{% url 'change_employee_status' employee.id %}">
+                {% csrf_token %}
+                <button type="submit">Change Status</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>

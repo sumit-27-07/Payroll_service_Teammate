@@ -1,0 +1,19 @@
+<h2>Leave Requests</h2>
+<ul>
+    {% for leave in leave_requests %}
+        <li>
+            {{ leave.employee.name }} - {{ leave.start_date }} to {{ leave.end_date }} - {{ leave.reason }} - {{ leave.status }}
+            {% if leave.status == 'pending' %}
+                <form method="post" action="{% url 'manage_leave_request' leave.id 'approve' %}">
+                    {% csrf_token %}
+                    <button type="submit">Approve</button>
+                </form>
+                <form method="post" action="{% url 'manage_leave_request' leave.id 'reject' %}">
+                    {% csrf_token %}
+                    <button type="submit">Reject</button>
+                </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
