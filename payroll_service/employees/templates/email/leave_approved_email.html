@@ -1,0 +1,17 @@
+<!-- employees/templates/email/leave_approved_email.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Approved</title>
+</head>
+<body>
+    <p>Dear {{ employee_name }},</p>
+    <p>Your leave request from {{ leave.start_date }} to {{ leave.end_date }} has been <strong>approved</strong>.</p>
+    <p>Reason: {{ leave.reason }}</p>
+    <p>Approved by: {{ hr_name }}</p>
+    <p>Thank you.</p>
+</body>
+</html>

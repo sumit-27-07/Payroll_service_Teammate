@@ -4,6 +4,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserForm, EmployeeForm, HRForm, LeaveForm
 from .models import Employee, HR, Leave
+from django.core.mail import send_mail,EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+from smtplib import SMTPAuthenticationError
 
 def signup_employee(request):
     if request.method == 'POST':
@@ -113,16 +117,40 @@ def show_leave_requests(request):
 
 @login_required
 def manage_leave_request(request, leave_id, decision):
-    leave_request = get_object_or_404(Leave, id=leave_id)
-    if request.user.hr == leave_request.employee.hr:
+    leave = get_object_or_404(Leave, id=leave_id)
+    if hasattr(request.user, 'hr'):
         if decision == 'approve':
-            leave_request.status = 'approved'
+            leave.status = 'Approved'
         elif decision == 'reject':
-            leave_request.status = 'rejected'
-        leave_request.save()
+            leave.status = 'Rejected'
+        leave.save()
+        send_leave_status_email(leave, request.user.username)
     return redirect('show_leave_requests')
 
+def send_leave_status_email(leave, hr_name):
+    if leave.status == 'Approved':
+        subject = "Leave Request Approved"
+        template_name = 'email/leave_approved_email.html'
+    else:
+        subject = "Leave Request Rejected"
+        template_name = 'email/leave_rejected_email.html'
+    
+    context = {
+        'employee_name': leave.employee.user.username,
+        'leave': leave,
+        'hr_name': hr_name,
+    }
 
+    message = render_to_string(template_name, context)
+    email = EmailMultiAlternatives(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,  # Static email as the sender
+        [leave.employee.user.email]
+    )
+    email.attach_alternative(message, "text/html")
+    email.send()
+    
 
 def home(request):
     return render(request, 'home.html')
