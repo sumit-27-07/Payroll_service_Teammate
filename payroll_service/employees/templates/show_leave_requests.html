@@ -31,22 +31,28 @@
             color: #FFFFFF;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        li {
-            background-color: rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
+        th, td {
             padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border: 1px solid #ddd;
+            text-align: left;
         }
-        li form {
+        th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .action-buttons form {
             display: inline-block;
-            margin-left: 10px;
         }
         button {
             padding: 5px 10px;
@@ -75,23 +81,43 @@
 <body>
     <div class="container">
         <h2>Leave Requests</h2>
-        <ul>
-            {% for leave in leave_requests %}
-                <li>
-                    <span>{{ leave.employee.name }} - {{ leave.start_date }} to {{ leave.end_date }} - {{ leave.reason }} - {{ leave.status }}</span>
-                    {% if leave.status == 'pending' %}
-                        <form method="post" action="{% url 'manage_leave_request' leave.id 'approve' %}">
-                            {% csrf_token %}
-                            <button type="submit">Approve</button>
-                        </form>
-                        <form method="post" action="{% url 'manage_leave_request' leave.id 'reject' %}">
-                            {% csrf_token %}
-                            <button type="submit">Reject</button>
-                        </form>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leave_requests %}
+                    <tr>
+                        <td>{{ leave.employee.name }}</td>
+                        <td>{{ leave.start_date }}</td>
+                        <td>{{ leave.end_date }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>{{ leave.status }}</td>
+                        <td>
+                            {% if leave.status == 'pending' %}
+                                <div class="action-buttons">
+                                    <form method="post" action="{% url 'manage_leave_request' leave.id 'approve' %}">
+                                        {% csrf_token %}
+                                        <button type="submit">Approve</button>
+                                    </form>
+                                    <form method="post" action="{% url 'manage_leave_request' leave.id 'reject' %}">
+                                        {% csrf_token %}
+                                        <button type="submit">Reject</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         <a href="{% url 'dashboard' %}">Back to Dashboard</a>
     </div>
 </body>
