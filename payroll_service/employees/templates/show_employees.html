@@ -31,22 +31,21 @@
             color: #FFFFFF;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        li {
-            background-color: rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
+        th, td {
             padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border: 1px solid #ddd;
+            text-align: left;
         }
-        li form {
-            display: inline-block;
-            margin-left: 10px;
+        th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
         }
         button {
             padding: 5px 10px;
@@ -75,17 +74,31 @@
 <body>
     <div class="container">
         <h2>Employees under {{ user.username }}</h2>
-        <ul>
-            {% for employee in employees %}
-                <li>
-                    <span>{{ employee.name }} - {{ employee.employee_id }} - {{ employee.status }}</span>
-                    <form method="post" action="{% url 'change_employee_status' employee.id %}">
-                        {% csrf_token %}
-                        <button type="submit">Change Status</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.name }}</td>
+                        <td>{{ employee.employee_id }}</td>
+                        <td>{{ employee.status }}</td>
+                        <td>
+                            <form method="post" action="{% url 'change_employee_status' employee.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Change Status</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         <a href="{% url 'dashboard' %}">Back to Dashboard</a>
     </div>
 </body>

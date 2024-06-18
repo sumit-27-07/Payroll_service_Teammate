@@ -121,9 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 import os
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
@@ -136,5 +134,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sumitkumarsaw1994@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = ''  # Your email password
+EMAIL_HOST_USER = 'tamannasingh214@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'zaev loao eneq ikjk'  # Your email password
