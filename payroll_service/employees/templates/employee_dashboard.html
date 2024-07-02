@@ -67,6 +67,23 @@
         a:hover {
             background-color: #0056b3;
         }
+        table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid white;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #000000;
+    }
     </style>
 </head>
 <body>
@@ -77,13 +94,34 @@
         <a href="{% url 'logout' %}">Logout</a>
 
         <h3>Your Leave Requests</h3>
-        <ul>
-            {% for leave in leave_requests %}
-                <li>
-                    From: {{ leave.start_date }} To: {{ leave.end_date }} - Reason: {{ leave.reason }} - Status: {{ leave.status }}
-                </li>
-            {% endfor %}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leave_requests %}
+                    <tr>
+                        <td>{{ leave.start_date }}</td>
+                        <td>{{ leave.end_date }}</td>
+                        <td>{{ leave.reason }}</td>
+                        <td>{{ leave.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="{% url 'calculate_total_leave_days' %}" method="get">
+            <button type="submit">Show Total Leave Days</button>
+        </form>   
+        <form method="POST" action="{% url 'show_payroll_details' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Show Payroll Details</button>
+        </form> 
     </div>
+    
 </body>
 </html>

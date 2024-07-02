@@ -1,0 +1,60 @@
+<!-- templates/payroll_details.html -->
+
+
+{% block content %}
+    <h2>Payroll Details</h2>
+    {% if payrolls %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total Salary</th>
+                    <th>Deduction Amount</th>
+                    <th>Net Salary</th>
+                    <th>Payment Status</th>
+                    <th>Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payroll in payrolls %}
+                    <tr>
+                        <td>{{ payroll.month|date:"F Y" }}</td>
+                        <td>{{ payroll.total_salary }}</td>
+                        <td>{{ payroll.deduction_amount }}</td>
+                        <td>{{ payroll.net_salary }}</td>
+                        <td>{{ payroll.payment_status }}</td>
+                        <td>{{ payroll.payment_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No payroll information available.</p>
+    {% endif %}
+{% endblock %}
+
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .table th, .table td {
+        border: 2px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    .table th {
+        background-color: #f2f2f2;
+    }
+    
+    .table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    
+    .table tr:hover {
+        background-color: #f1f1f1;
+    }
+    </style>
