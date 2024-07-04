@@ -1,13 +1,18 @@
+from datetime import timedelta
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserForm, EmployeeForm, HRForm, LeaveForm
-from .models import Employee, HR, Leave
+from .forms import UserForm, EmployeeForm, HRForm, LeaveForm, SalaryJobTypeForm,PayrollForm
+from .models import Employee, HR, Leave,Payroll
 from django.core.mail import send_mail,EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from smtplib import SMTPAuthenticationError
+from django.db.models import ExpressionWrapper, F, DurationField,Sum
+
+
 
 def signup_employee(request):
     if request.method == 'POST':
@@ -109,6 +114,31 @@ def apply_leave(request):
     return render(request, 'apply_leave.html', {'leave_form': leave_form})
 
 @login_required
+def calculate_total_leave_days(request):
+    if hasattr(request.user, 'employee'):
+        employee = request.user.employee
+        today = timezone.localdate()
+        start_of_month = today.replace(day=1)
+        end_of_month = (start_of_month + timedelta(days=31)).replace(day=1) - timedelta(days=1)
+
+        # Calculate total leave days for the current month
+        total_leave_days = Leave.objects.filter(
+            employee=employee,
+            status='Approved',
+            start_date__lte=end_of_month,
+            end_date__gte=start_of_month
+        ).annotate(
+            duration=ExpressionWrapper(
+                F('end_date') - F('start_date') + timedelta(days=1),
+                output_field=DurationField()
+            )
+        ).aggregate(total_days=Sum('duration'))
+
+        total_days = total_leave_days['total_days'].days if total_leave_days['total_days'] else 0
+        return render(request, 'total_leave_days.html', {'total_leave_days': total_days})
+    return redirect('dashboard')
+
+@login_required
 def show_leave_requests(request):
     if hasattr(request.user, 'hr'):
         leave_requests = Leave.objects.filter(employee__hr=request.user.hr)
@@ -151,6 +181,61 @@ def send_leave_status_email(leave, hr_name):
     email.attach_alternative(message, "text/html")
     email.send()
     
+def add_salary_job_type(request):
+    if request.method == 'POST':
+        form = SalaryJobTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Replace with the name of the success URL or page
+    else:
+        form = SalaryJobTypeForm()
+    return render(request, 'add_salary_job_type.html', {'form': form})
+
+def calculate_payroll(request):
+    if request.method == 'POST':
+        form = PayrollForm(request.POST)
+        if form.is_valid():
+            employee = form.cleaned_data['employee']
+
+            today = timezone.localdate()
+            start_of_month = today.replace(day=1)
+            end_of_month = (start_of_month + timedelta(days=31)).replace(day=1) - timedelta(days=1)
+
+            # Calculate total leave days for the current month
+            total_leave_days = Leave.objects.filter(
+                employee=employee,
+                status='Approved',
+                start_date__lte=end_of_month,
+                end_date__gte=start_of_month
+            ).annotate(
+                duration=ExpressionWrapper(
+                    F('end_date') - F('start_date') + timedelta(days=1),
+                    output_field=DurationField()
+                )
+            ).aggregate(total_days=Sum('duration'))
+
+            total_leave_days_count = total_leave_days['total_days'].days if total_leave_days['total_days'] else 0
+
+            # Call the calculate_payroll method from LeaveManager
+            payroll = Leave.objects.calculate_payroll(employee, total_leave_days_count)
+            return render(request, 'payroll_success.html', {'payroll': payroll})
+    else:
+        form = PayrollForm()
+    return render(request, 'calculate_payroll.html', {'form': form})
+
+
+@login_required
+def show_payroll_details(request):
+    employee = request.user.employee
+
+    # Get all payroll records for the employee
+    payrolls = Payroll.objects.filter(employee=employee).order_by('-month')
+
+    context = {
+        'payrolls': payrolls,
+    }
+
+    return render(request, 'payroll_details.html', context)
 
 def home(request):
     return render(request, 'home.html')

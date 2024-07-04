@@ -1,0 +1,19 @@
+<!-- employees/templates/add_salary_job_type.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Salary Job Type</title>
+</head>
+<body>
+    <h2>Add Salary Job Type</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Job Type</button>
+    </form>
+    <a href="{% url 'home' %}">Back to Dashboard</a>
+</body>
+</html>

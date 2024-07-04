@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Employee, HR, Leave
+from .models import Employee, HR, Leave,SalaryJobType
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -24,3 +24,11 @@ class LeaveForm(forms.ModelForm):
     class Meta:
         model = Leave
         fields = ['start_date', 'end_date', 'reason']
+
+class SalaryJobTypeForm(forms.ModelForm):
+    class Meta:
+        model = SalaryJobType
+        fields = ['job_type', 'salary', 'deduction_money']
+
+class PayrollForm(forms.Form):
+    employee = forms.ModelChoiceField(queryset=Employee.objects.all())
