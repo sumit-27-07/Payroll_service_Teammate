@@ -4,14 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payroll Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom right, #003366, #000033);
+            background-size: cover;
+            color: #FFFFFF;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 {
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        a {
+            display: block;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            width: 200px; 
+            margin: 20px auto 0; 
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h2>Payroll Calculation Successful</h2>
-    <p>Employee: {{ payroll.employee.name }}</p>
-    <p>Total Salary: {{ payroll.total_salary }}</p>
-    <p>Deduction Amount: {{ payroll.deduction_amount }}</p>
-    <p>Net Salary: {{ payroll.net_salary }}</p>
-    <p>Month: {{ payroll.month|date:"F Y" }}</p>
-    <a href="{% url 'home' %}">Back to Dashboard</a>
+    <div class="container">
+        <h2>Payroll Calculation Successful</h2>
+        <p>Employee: {{ payroll.employee.name }}</p>
+        <p>Total Salary: {{ payroll.total_salary }}</p>
+        <p>Deduction Amount: {{ payroll.deduction_amount }}</p>
+        <p>Net Salary: {{ payroll.net_salary }}</p>
+        <p>Month: {{ payroll.month|date:"F Y" }}</p>
+        <a href="{% url 'home' %}">Back to Dashboard</a>
+    </div>
 </body>
 </html>

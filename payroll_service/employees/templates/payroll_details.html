@@ -1,60 +1,111 @@
-<!-- templates/payroll_details.html -->
-
-
-{% block content %}
-    <h2>Payroll Details</h2>
-    {% if payrolls %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Month</th>
-                    <th>Total Salary</th>
-                    <th>Deduction Amount</th>
-                    <th>Net Salary</th>
-                    <th>Payment Status</th>
-                    <th>Payment Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for payroll in payrolls %}
-                    <tr>
-                        <td>{{ payroll.month|date:"F Y" }}</td>
-                        <td>{{ payroll.total_salary }}</td>
-                        <td>{{ payroll.deduction_amount }}</td>
-                        <td>{{ payroll.net_salary }}</td>
-                        <td>{{ payroll.payment_status }}</td>
-                        <td>{{ payroll.payment_date }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No payroll information available.</p>
-    {% endif %}
-{% endblock %}
-
-
-<style>
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    .table th, .table td {
-        border: 2px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    
-    .table th {
-        background-color: #f2f2f2;
-    }
-    
-    .table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    
-    .table tr:hover {
-        background-color: #f1f1f1;
-    }
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom right, #003366, #000033);
+            background-size: cover;
+            color: #FFFFFF;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 {
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        a {
+            display: block;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            width: 200px; 
+            margin: 20px auto 0; 
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
     </style>
+</head>
+<body>
+    <div class="container">
+        {% block content %}
+            <h2>Payroll Details</h2>
+            {% if payrolls %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Total Salary</th>
+                            <th>Deduction Amount</th>
+                            <th>Net Salary</th>
+                            <th>Payment Status</th>
+                            <th>Payment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payroll in payrolls %}
+                            <tr>
+                                <td>{{ payroll.month|date:"F Y" }}</td>
+                                <td>{{ payroll.total_salary }}</td>
+                                <td>{{ payroll.deduction_amount }}</td>
+                                <td>{{ payroll.net_salary }}</td>
+                                <td>{{ payroll.payment_status }}</td>
+                                <td>{{ payroll.payment_date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No payroll information available.</p>
+            {% endif %}
+        {% endblock %}
+    </div>
+</body>
+</html>

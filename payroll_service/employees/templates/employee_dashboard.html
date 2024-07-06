@@ -23,38 +23,20 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            max-width: 600px;
+            max-width: 800px;
             width: 100%;
             text-align: center;
         }
-        h2 {
+        h2, h3 {
             color: #FFFFFF;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
         }
         p {
             margin-bottom: 20px;
         }
-        h3 {
-            color: #FFFFFF;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin-top: 30px;
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            text-align: left;
-        }
-        li {
-            background-color: rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        a {
-            display: block;
-            padding: 10px;
+        a, button {
+            display: inline-block;
+            padding: 10px 20px;
             background-color: #007bff;
             color: #ffffff;
             border: none;
@@ -62,28 +44,31 @@
             cursor: pointer;
             font-size: 16px;
             text-decoration: none;
-            margin-bottom: 10px;
+            margin: 10px 5px; /* Adjusted to align buttons */
+            width: auto; /* Removed fixed width for consistency */
         }
-        a:hover {
+        a:hover, button:hover {
             background-color: #0056b3;
         }
         table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table, th, td {
-        border: 1px solid white;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #000000;
-    }
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        form {
+            display: inline; /* Adjusted to align buttons */
+        }
     </style>
 </head>
 <body>
@@ -91,6 +76,13 @@
         <h2>Welcome, {{ user.username }}</h2>
         <p>Employee Dashboard</p>
         <a href="{% url 'apply_leave' %}">Apply for Leave</a>
+        <form action="{% url 'calculate_total_leave_days' %}" method="get">
+            <button type="submit">Show Total Leave Days</button>
+        </form>   
+        <form method="POST" action="{% url 'show_payroll_details' %}">
+            {% csrf_token %}
+            <button type="submit">Show Payroll Details</button>
+        </form> 
         <a href="{% url 'logout' %}">Logout</a>
 
         <h3>Your Leave Requests</h3>
@@ -114,14 +106,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <form action="{% url 'calculate_total_leave_days' %}" method="get">
-            <button type="submit">Show Total Leave Days</button>
-        </form>   
-        <form method="POST" action="{% url 'show_payroll_details' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Show Payroll Details</button>
-        </form> 
     </div>
-    
 </body>
 </html>
