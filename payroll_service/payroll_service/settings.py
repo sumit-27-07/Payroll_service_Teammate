@@ -38,13 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'employees',
-    'django_crontab',
     'django_apscheduler',
 ]
 
-CRONJOBS = [
-    ('0 0 1 * *', 'employees.management.commands.reset_leave_days.reset_leave_days', '>> /path/to/logfile.log 2>&1')
-]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,9 +80,9 @@ WSGI_APPLICATION = 'payroll_service.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'payroll_db',
+        'NAME': 'payroll_db2',
         'USER': 'postgres',
-        'PASSWORD': '12345',
+        'PASSWORD': 'sumit1994#',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -139,5 +136,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'tamannasingh214@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'zaev loao eneq ikjk'  # Your email password
+EMAIL_HOST_USER = 'sumitkumarsaw1994@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'ynmvaltkskdscygw'  # Your email password
