@@ -28,7 +28,7 @@ class Command(BaseCommand):
         print(f"Today: {today}")
         print(f"Current time (with timezone): {timezone.now()}")
 
-        if today.day != 5:
+        if today.day != 8:
             self.stdout.write(self.style.WARNING(f"Payroll processing is only available on the 1st of the month."))
             return
 

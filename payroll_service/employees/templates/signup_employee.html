@@ -36,11 +36,11 @@
             flex-direction: column;
         }
         form p {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         form label {
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             color: #AAAAAA;
         }
         form input[type="text"],
@@ -62,8 +62,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
+            font-size: 9px;
+            margin-top: 6px;
         }
         button:hover {
             background-color: #0056b3;
@@ -73,7 +73,7 @@
                 padding: 15px;
             }
             h2 {
-                font-size: 18px;
+                font-size: 15px;
             }
             form input[type="text"],
             form input[type="password"],
@@ -110,7 +110,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Employee Signup</h2>
+        <h2 >Employee Signup</h2>
         <form method="post">
             {% csrf_token %}
             {{ user_form.as_p }}
