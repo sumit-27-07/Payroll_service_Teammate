@@ -29,6 +29,8 @@ class Employee(models.Model):
         ('Junior Developer', 'Junior Developer'),
         ('Manager', 'Manager'),
         ('Clerk', 'Clerk'),
+        ('tester','tester')
+
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

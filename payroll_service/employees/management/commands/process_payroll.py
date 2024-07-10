@@ -10,9 +10,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--date', type=str, help='The date to process payroll for (format: YYYY-MM-DD)')
+        parser.add_argument('--bypass-date-check', action='store_true', help='Bypass the date check for testing purposes')
 
     def handle(self, *args, **kwargs):
         date_str = kwargs['date']
+        bypass_date_check = kwargs['bypass_date_check']
 
         # Get the date to process
         if date_str:
@@ -24,27 +26,27 @@ class Command(BaseCommand):
         else:
             today = timezone.localdate()  # Get the current date in local timezone
 
-        # Debug: Print the actual 'today' date and the current time
-        print(f"Today: {today}")
-        print(f"Current time (with timezone): {timezone.now()}")
+        # Check if it's the last day of the month unless bypassing the date check
+        if not bypass_date_check:
+            first_day_of_next_month = (today.replace(day=1) + timedelta(days=32)).replace(day=1)
+            last_day_of_current_month = first_day_of_next_month - timedelta(days=1)
 
-        if today.day != 8:
-            self.stdout.write(self.style.WARNING(f"Payroll processing is only available on the 1st of the month."))
-            return
+            if today != last_day_of_current_month:
+                self.stdout.write(self.style.WARNING(f"Payroll processing is only available on the last day of the month. Today is {today}."))
+                return
 
-        # Process payroll for the previous month
-        first_day_of_current_month = today
-        last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
-        first_day_of_last_month = last_day_of_last_month.replace(day=1)
-        month = last_day_of_last_month.strftime('%B %Y')
+        # Process payroll for the current month
+        first_day_of_current_month = today.replace(day=1)
+        last_day_of_current_month = (first_day_of_current_month + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+        month = today.strftime('%B %Y')
 
         # Debug: Print dates for verification
+        print(f"Today: {today}")
         print(f"First day of current month: {first_day_of_current_month}")
-        print(f"Last day of last month: {last_day_of_last_month}")
-        print(f"First day of last month: {first_day_of_last_month}")
+        print(f"Last day of current month: {last_day_of_current_month}")
 
         # Process payroll for each employee
-        payrolls = Payroll.objects.filter(month__year=first_day_of_last_month.year, month__month=first_day_of_last_month.month, payment_status='pending')
+        payrolls = Payroll.objects.filter(month__year=first_day_of_current_month.year, month__month=first_day_of_current_month.month, payment_status='pending')
 
         # Debug: Print the payroll records to be processed
         print(f"Payroll records to be processed: {list(payrolls)}")

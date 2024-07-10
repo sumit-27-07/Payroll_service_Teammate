@@ -38,13 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'employees',
-    'django_crontab',
     'django_apscheduler',
 ]
 
-CRONJOBS = [
-    ('0 0 1 * *', 'employees.management.commands.reset_leave_days.reset_leave_days', '>> /path/to/logfile.log 2>&1')
-]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
